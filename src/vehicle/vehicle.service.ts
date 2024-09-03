@@ -14,4 +14,9 @@ export class VehicleService {
     const createdVehicle = await this.vehicleModel.create(createVehicleDto);
     return createdVehicle;
   }
+
+  async findVehicles(params): Promise<Vehicle[]> {
+    const createdVehicle = await this.vehicleModel.find(params);
+    return createdVehicle;
+  }
 }

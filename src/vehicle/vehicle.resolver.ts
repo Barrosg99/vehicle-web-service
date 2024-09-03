@@ -1,4 +1,12 @@
-import { Args, Context, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  Query,
+  Mutation,
+  Parent,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { Vehicle } from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
@@ -13,11 +21,16 @@ export class VehicleResolver {
     return { __typename: 'User', id: vehicle.userId };
   }
 
+  @Query((returns) => [Vehicle])
+  async myVehicles(@Context('userId') userId: string) {
+    return this.vehiclesService.findVehicles({ userId });
+  }
+
   @Mutation((returns) => Vehicle)
   async createVehicle(
     @Args('createVehicleData') createVehicleData: CreateVehicleDto,
     @Context('userId') userId: string,
   ) {
-    return this.vehiclesService.create({...createVehicleData, userId});
+    return this.vehiclesService.create({ ...createVehicleData, userId });
   }
 }
