@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { PaymentMethodType } from '../models/vehicle.model';
 
 @InputType()
 export class CreateVehicleDto {
@@ -10,4 +11,7 @@ export class CreateVehicleDto {
 
   @Field()
   readonly userId?: string;
+
+  @Field()
+  readonly paymentMethod: PaymentMethodType;
 }

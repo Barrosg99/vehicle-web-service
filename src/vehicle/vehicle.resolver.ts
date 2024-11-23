@@ -33,4 +33,13 @@ export class VehicleResolver {
   ) {
     return this.vehiclesService.create({ ...createVehicleData, userId });
   }
+
+  @Mutation((returns) => Vehicle)
+  async updateVehicle(
+    @Args('vehicleId') vehicleId: string,
+    @Args('vehicleData') vehicleData: CreateVehicleDto,
+    @Context('userId') userId: string,
+  ) {
+    return this.vehiclesService.edit({ ...vehicleData, userId }, vehicleId);
+  }
 }

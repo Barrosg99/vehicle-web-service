@@ -15,6 +15,18 @@ export class VehicleService {
     return createdVehicle;
   }
 
+  async edit(
+    createVehicleDto: CreateVehicleDto,
+    vehicleId: string,
+  ): Promise<Vehicle> {
+    const updatedVehicle = await this.vehicleModel.findOneAndUpdate(
+      { _id: vehicleId },
+      { $set: { ...createVehicleDto } },
+      { new: true },
+    );
+    return updatedVehicle;
+  }
+
   async findVehicles(params): Promise<Vehicle[]> {
     const createdVehicle = await this.vehicleModel.find(params);
     return createdVehicle;
