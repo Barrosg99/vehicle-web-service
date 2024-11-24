@@ -3,12 +3,34 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Vehicle } from './models/vehicle.model';
 import { Model } from 'mongoose';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class VehicleService {
   constructor(
     @InjectModel(Vehicle.name) private vehicleModel: Model<Vehicle>,
   ) {}
+
+  @RabbitRPC({
+    exchange: '',
+    routingKey: 'vehicle.queue',
+    queue: 'vehicle.queue',
+  })
+  public async fillParkingStayMsg(msg) {
+    if (!msg || !msg.licensePlate) throw new Error('Wrong Format');
+
+    const vehicle = await this.vehicleModel.findOne({
+      licensePlate: msg.licensePlate,
+    });
+
+    if (!vehicle) throw new Error('Vehicle not found');
+
+    return {
+      vehicleId: vehicle.id,
+      userId: vehicle.userId,
+      paymentMethod: vehicle.paymentMethod,
+    };
+  }
 
   async create(createVehicleDto: CreateVehicleDto): Promise<Vehicle> {
     const createdVehicle = await this.vehicleModel.create(createVehicleDto);
