@@ -24,11 +24,24 @@ export class VehicleService {
       { $set: { ...createVehicleDto } },
       { new: true },
     );
+
+    if (!updatedVehicle) throw new Error('Vehicle not found.');
+
     return updatedVehicle;
   }
 
   async findVehicles(params): Promise<Vehicle[]> {
     const createdVehicle = await this.vehicleModel.find(params);
     return createdVehicle;
+  }
+
+  async delete(vehicleId: string, userId: string): Promise<Vehicle> {
+    const vehicle = await this.vehicleModel.findOne({ _id: vehicleId, userId });
+
+    if (!vehicle) throw new Error('Vehicle not found.');
+
+    await vehicle.deleteOne();
+
+    return vehicle;
   }
 }

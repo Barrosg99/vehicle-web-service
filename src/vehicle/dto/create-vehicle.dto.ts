@@ -9,7 +9,6 @@ export class CreateVehicleDto {
   @Field()
   readonly licensePlate: string;
 
-  @Field()
   readonly userId?: string;
 
   @Field()

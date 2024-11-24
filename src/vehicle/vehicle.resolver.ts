@@ -23,6 +23,8 @@ export class VehicleResolver {
 
   @Query((returns) => [Vehicle])
   async myVehicles(@Context('userId') userId: string) {
+    if (!userId) throw new Error('You must be logged to execute this action.');
+
     return this.vehiclesService.findVehicles({ userId });
   }
 
@@ -31,6 +33,8 @@ export class VehicleResolver {
     @Args('createVehicleData') createVehicleData: CreateVehicleDto,
     @Context('userId') userId: string,
   ) {
+    if (!userId) throw new Error('You must be logged to execute this action.');
+
     return this.vehiclesService.create({ ...createVehicleData, userId });
   }
 
@@ -40,6 +44,18 @@ export class VehicleResolver {
     @Args('vehicleData') vehicleData: CreateVehicleDto,
     @Context('userId') userId: string,
   ) {
+    if (!userId) throw new Error('You must be logged to execute this action.');
+
     return this.vehiclesService.edit({ ...vehicleData, userId }, vehicleId);
+  }
+
+  @Mutation((returns) => Vehicle)
+  async deleteVehicle(
+    @Args('vehicleId') vehicleId: string,
+    @Context('userId') userId: string,
+  ) {
+    if (!userId) throw new Error('You must be logged to execute this action.');
+
+    return this.vehiclesService.delete(vehicleId, userId);
   }
 }
