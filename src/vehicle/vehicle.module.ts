@@ -5,7 +5,6 @@ import { Vehicle, VehicleSchema } from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -14,10 +13,6 @@ import { Logger } from '@nestjs/common';
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        Logger.log(
-          `🚀 RABBITMQ_URI: ${configService.get('RABBITMQ_URI')}`,
-          'API',
-        );
         return {
           uri:
             configService.get('RABBITMQ_URI') ||

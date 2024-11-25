@@ -23,7 +23,7 @@ export class VehicleService {
       licensePlate: msg.licensePlate,
     });
 
-    if (!vehicle) throw new Error('Vehicle not found');
+    if (!vehicle) return { notFound: true };
 
     return {
       vehicleId: vehicle.id,
