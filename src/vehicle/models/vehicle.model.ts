@@ -1,8 +1,7 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Directive, Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { User } from './user.model';
-
 
 export enum PaymentMethodType {
   CreditCard = 'credit-card',
@@ -13,6 +12,7 @@ registerEnumType(PaymentMethodType, { name: 'PaymentMethodType' });
 
 @Schema({ timestamps: true })
 @ObjectType()
+@Directive('@key(fields: "id")')
 export class Vehicle {
   @Field(() => ID)
   id: string;

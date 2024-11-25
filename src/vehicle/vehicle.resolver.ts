@@ -6,6 +6,7 @@ import {
   Parent,
   ResolveField,
   Resolver,
+  ResolveReference,
 } from '@nestjs/graphql';
 import { Vehicle } from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
@@ -57,5 +58,13 @@ export class VehicleResolver {
     if (!userId) throw new Error('You must be logged to execute this action.');
 
     return this.vehiclesService.delete(vehicleId, userId);
+  }
+
+  @ResolveReference()
+  resolveReference(reference: {
+    __typename: string;
+    id: string;
+  }): Promise<Vehicle> {
+    return this.vehiclesService.findOne(reference.id);
   }
 }

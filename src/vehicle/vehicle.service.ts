@@ -57,6 +57,10 @@ export class VehicleService {
     return createdVehicle;
   }
 
+  async findOne(id: string): Promise<Vehicle> {
+    return this.vehicleModel.findById(id);
+  }
+
   async delete(vehicleId: string, userId: string): Promise<Vehicle> {
     const vehicle = await this.vehicleModel.findOne({ _id: vehicleId, userId });
 
