@@ -9,6 +9,7 @@ import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
+import { HealthController } from './app.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,9 @@ import {
         const mongoDB = configService.get<string>('MONGO_DB');
 
         return {
-          uri: `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDB}?authSource=admin`,
+          uri:
+            configService.get<string>('MONGO_URI') ||
+            `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDB}?authSource=admin`,
         };
       },
       inject: [ConfigService],
@@ -45,5 +48,6 @@ import {
     }),
     VehicleModule,
   ],
+  controllers: [HealthController]
 })
 export class AppModule {}
